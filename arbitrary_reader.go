@@ -68,3 +68,44 @@ func (r *DelimitedReader) Read(delim byte) (n int, err error) {
 
 	return len(line), err
 }
+
+// Seek look for the first instance of until.
+//
+// It always works on the current boundaries of the data.
+// When it finds what it looks for it returns the number of bytes sought before to find it.
+// Otherwise will also return an error.
+// Search is only backwards at the moment,
+// from the right boundary (end) to the left one (start position).
+// It returns the number of bytes read to find the first occurrence of the until byte.
+// It sets the right boundary (end) of the data to the character after the until byte,
+// so the user can eventually start again from here.
+func (r *DelimitedReader) Seek(until byte, backwards bool) (n int, err error) {
+	data := r.data
+	if len(data) == 0 {
+		return 0, ErrNotFound
+	}
+	if backwards {
+		// Data boundaries
+		p := r.p
+		i := r.pe - 1
+
+		// Until there are no more bytes or they are different from the the sought one
+		for ; i >= p && data[i] != until; i-- {
+		}
+
+		// Store the number of sought bytes
+		n := r.pe - i
+
+		// Did we find anything?
+		if i == p-1 && data[p] != until {
+			return r.pe - i, ErrNotFound
+		}
+
+		// Update the right boundary to be the character next to the sought one
+		r.pe = i + 1
+
+		return n, nil
+	}
+
+	panic("not implemented")
+}
