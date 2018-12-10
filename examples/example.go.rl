@@ -27,14 +27,12 @@ type machine struct{
 
 // Exec implements the ragel.Parser interface.
 func (m *machine) Exec(s *parser.State) (int, int) {
-    // Retrieve the current state
-    cs := s.Current()
     // Retrieve previously stored parsing variables
-    p, pe, eof, data := s.Get()
+    cs, p, pe, eof, data := s.Get()
     // Inline FSM code here
 	%% write exec;
     // Update parsing variables
-	s.Set(p, pe, eof)
+	s.Set(%%{ write start; }%%, p, pe, eof)
 	return p, pe
 }
 
