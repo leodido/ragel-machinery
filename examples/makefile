@@ -1,12 +1,17 @@
 SHELL := /bin/bash
 
-example.go: example.go.rl
+.PHONY: all
+all: newlines.go multiline.go
+
+newlines.go: newlines.go.rl
 	ragel -Z -G2 -e -o $@ $<
 	@gofmt -w -s $@
 	@sed -i '/^\/\/line/d' $@
 
-.PHONY: build
-build: example.go
+multiline.go: multiline.go.rl
+	ragel -Z -G2 -e -o $@ $<
+	@gofmt -w -s $@
+	@sed -i '/^\/\/line/d' $@
 
 .PHONY: tests
 tests: *_test.go
