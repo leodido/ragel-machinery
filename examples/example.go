@@ -129,7 +129,7 @@ func (m *machine) Exec(s *parser.State) (int, int) {
 			goto st9
 		}
 		if 48 <= data[p] && data[p] <= 57 {
-			goto st10
+			goto tr9
 		}
 		goto st0
 	st9:
@@ -138,30 +138,28 @@ func (m *machine) Exec(s *parser.State) (int, int) {
 		}
 	st_case_9:
 		if 48 <= data[p] && data[p] <= 57 {
-			goto st10
+			goto tr9
 		}
 		goto st0
+	tr9:
+
+		{
+			m.lines = append(m.lines, string(data[:p+1]))
+		}
+
+		goto st10
 	st10:
 		if p++; p == pe {
 			goto _test_eof10
 		}
 	st_case_10:
 		if data[p] == 10 {
-			goto tr10
+			goto st11
 		}
 		if 48 <= data[p] && data[p] <= 57 {
-			goto st10
+			goto tr9
 		}
 		goto st0
-	tr10:
-
-		{
-			// Retrieve from the State the data window that matched current line ..
-			_, _, _, line := s.Get()
-			m.lines = append(m.lines, string(line[:len(line)-1]))
-		}
-
-		goto st11
 	st11:
 		if p++; p == pe {
 			goto _test_eof11

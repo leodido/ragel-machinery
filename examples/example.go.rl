@@ -8,14 +8,14 @@ import (
 
 %%{
 machine prova;
+
 action line {
     {
-        // Retrieve from the State the data window that matched current line ..
-        _, _, _, line := s.Get()
-        m.lines = append(m.lines, string(line[:len(line)-1]))
+        m.lines = append(m.lines, string(data[:p+1]))
     }
 }
-main := ("example" . ' '? . digit+) %line . 10;
+
+main := ("example"  . ' '? . digit+ @line) . 10;
 }%%
 
 %% write data nofinal;
