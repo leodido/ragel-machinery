@@ -24,7 +24,7 @@ type Option func(*parser)
 // WithStart serves to specify the ragel start state.
 func WithStart(cs int) Option {
 	return func(p *parser) {
-		p.currentState = cs
+		p.cs = cs
 	}
 }
 
@@ -79,4 +79,5 @@ func (p *Parser) Parse() {
 		// Execute the FSM
 		p.machine.Exec((*State)(p.parsingState))
 	}
+	p.machine.OnCompletion()
 }

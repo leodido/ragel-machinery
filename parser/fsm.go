@@ -8,4 +8,6 @@ type Machiner interface {
 	OnErr()
 	// OnEOF is a method called when an EOF is encountered.
 	OnEOF()
+	// OnCompletion is a method called when the parser loop completes.
+	OnCompletion()
 }
