@@ -6,22 +6,22 @@ import (
 	"io"
 )
 
-
 const prova_start int = 1
 const prova_error int = 0
 
 const prova_en_main int = 1
 
-
-type machine struct {
+type newlinesMachine struct {
 	// define here your support variables for ragel actions
 	lines []string
 }
 
 // Exec implements the ragel.Parser interface.
-func (m *machine) Exec(s *parser.State) (int, int) {
+func (m *newlinesMachine) Exec(s *parser.State) (int, int) {
+	// Tell it to parse from the start for each byte(10) delimited incoming chunk
+	cs := 1
 	// Retrieve previously stored parsing variables
-	cs, p, pe, eof, data := s.Get()
+	_, p, pe, eof, data := s.Get()
 	// Inline FSM code here
 
 	{
@@ -205,27 +205,26 @@ func (m *machine) Exec(s *parser.State) (int, int) {
 	}
 
 	// Update parsing variables
-	s.Set(1, p, pe, eof)
+	s.Set(cs, p, pe, eof)
 	return p, pe
 }
 
-func (m *machine) OnErr() {
+func (m *newlinesMachine) OnErr() {
 	fmt.Println("OnErr")
 }
 
-func (m *machine) OnEOF() {
+func (m *newlinesMachine) OnEOF() {
 	fmt.Println("OnEOF")
 }
 
 // Parse composes a new ragel parser for the incoming stream using the current FSM.
-func Parse(r io.Reader) []string {
-	fsm := &machine{}
-	fsm.lines = []string{}
+func (m *newlinesMachine) Parse(r io.Reader) []string {
+	m.lines = []string{}
 	p := parser.New(
 		parser.ArbitraryReader(r, '\n'), // How to read the stream
-		fsm,                             // How to parse it
+		m,                               // How to parse it
 		parser.WithStart(1),             // Options
 	)
 	p.Parse()
-	return fsm.lines
+	return m.lines
 }
