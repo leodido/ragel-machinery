@@ -7,7 +7,7 @@ import (
 )
 
 %%{
-machine prova;
+machine newlines;
 
 action line {
     {
@@ -25,7 +25,7 @@ type newlinesMachine struct{
     lines []string
 }
 
-// Exec implements the ragel.Parser interface.
+// Exec implements the parser.Parser interface.
 func (m *newlinesMachine) Exec(s *parser.State) (int, int) {
     // Tell it to parse from the start for each byte(10) delimited incoming chunk 
     cs := %%{ write start; }%%
@@ -46,12 +46,16 @@ func (m *newlinesMachine) OnEOF() {
     fmt.Println("OnEOF")
 }
 
+func (m *multilineMachine) OnCompletion() {
+    fmt.Println("OnCompletion")
+}
+
 // Parse composes a new ragel parser for the incoming stream using the current FSM.
 func (m *newlinesMachine) Parse(r io.Reader) []string {
     m.lines = []string{}
     p := parser.New(
         parser.ArbitraryReader(r, '\n'),        // How to read the stream
-        m,                                    // How to parse it
+        m,                                      // How to parse it
         parser.WithStart(%%{ write start; }%%), // Options
     )
     p.Parse()

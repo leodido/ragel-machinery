@@ -6,17 +6,17 @@ import (
 	"io"
 )
 
-const prova_start int = 1
-const prova_error int = 0
+const newlines_start int = 1
+const newlines_error int = 0
 
-const prova_en_main int = 1
+const newlines_en_main int = 1
 
 type newlinesMachine struct {
 	// define here your support variables for ragel actions
 	lines []string
 }
 
-// Exec implements the ragel.Parser interface.
+// Exec implements the parser.Parser interface.
 func (m *newlinesMachine) Exec(s *parser.State) (int, int) {
 	// Tell it to parse from the start for each byte(10) delimited incoming chunk
 	cs := 1
@@ -215,6 +215,10 @@ func (m *newlinesMachine) OnErr() {
 
 func (m *newlinesMachine) OnEOF() {
 	fmt.Println("OnEOF")
+}
+
+func (m *newlinesMachine) OnCompletion() {
+	fmt.Println("OnCompletion")
 }
 
 // Parse composes a new ragel parser for the incoming stream using the current FSM.
