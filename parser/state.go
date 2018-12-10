@@ -4,9 +4,9 @@ package parser
 type State parsingState
 
 type parsingState struct {
-	currentState int // _start (cs) at time 0
-	errorState   int // _error
-	finalState   int // _first_final
+	cs         int // _start at time 0, then eventually current state
+	errorState int // _error > fixme(leodido)
+	finalState int // _first_final > fixme(leodido)
 
 	p, pe, eof int    // parsing pointers
 	data       []byte // data pointer
@@ -14,10 +14,10 @@ type parsingState struct {
 
 // Set sets the state variables of a ragel parser.
 func (s *State) Set(cs, p, pe, eof int) {
-	s.currentState, s.p, s.pe, s.eof = cs, p, pe, eof
+	s.cs, s.p, s.pe, s.eof = cs, p, pe, eof
 }
 
 // Get retrieves the state variables of a ragel parser.
 func (s *State) Get() (cs, p, pe, eof int, data []byte) {
-	return s.currentState, s.p, s.pe, s.eof, s.data
+	return s.cs, s.p, s.pe, s.eof, s.data
 }
