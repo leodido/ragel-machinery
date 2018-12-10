@@ -1,17 +1,19 @@
-package ragelmachinery
+package parser
 
 import (
 	"bufio"
+	ragel "github.com/leodido/ragel-machinery"
 	"io"
 )
 
 // ArbitraryReader returns a Reader that reads from r
 // but stops when it finds a delimiter.
 // The underlying implementation is a *DelimitedReader.
-func ArbitraryReader(r io.Reader) *DelimitedReader {
+func ArbitraryReader(r io.Reader, delim byte) *DelimitedReader {
 	return &DelimitedReader{
+		delim:  delim,
 		reader: bufio.NewReader(r),
-		parsingState: parsingState{
+		parsingState: &parsingState{
 			data: []byte{},
 			p:    0,
 			pe:   0,
@@ -23,9 +25,15 @@ func ArbitraryReader(r io.Reader) *DelimitedReader {
 // DelimitedReader reads arbitrarily sized bytes slices until a delimiter is found.
 // It depends on and it keeps track of Ragel's state variables.
 type DelimitedReader struct {
-	reader *bufio.Reader
+	*parsingState
 
-	parsingState
+	delim  byte
+	reader *bufio.Reader
+}
+
+// State returns a pointer to the current State.
+func (r DelimitedReader) State() *State {
+	return (*State)(r.parsingState)
 }
 
 // Read reads a chunk of bytes until it finds a delimiter.
@@ -34,7 +42,7 @@ type DelimitedReader struct {
 // and updates them accordingly.
 // It returns the number of bytes read and, eventually, an error.
 // When delim is not found it returns an io.ErrUnexpectedEOF.
-func (r *DelimitedReader) Read(delim byte) (n int, err error) {
+func (r *DelimitedReader) Read() (n int, err error) {
 	p := r.p
 
 	// Process only the data still to read when P is greater than the half of the data
@@ -52,7 +60,7 @@ func (r *DelimitedReader) Read(delim byte) (n int, err error) {
 	}
 
 	// Read until the first occurrence of the delimiter
-	line, err := r.reader.ReadBytes(delim)
+	line, err := r.reader.ReadBytes(r.delim)
 
 	// Storing the data up to and including the delimiter
 	r.data = append(r.data, line...)
@@ -82,7 +90,7 @@ func (r *DelimitedReader) Read(delim byte) (n int, err error) {
 func (r *DelimitedReader) Seek(until byte, backwards bool) (n int, err error) {
 	data := r.data
 	if len(data) == 0 {
-		return 0, ErrNotFound
+		return 0, ragel.ErrNotFound
 	}
 	if backwards {
 		// Data boundaries
@@ -98,7 +106,7 @@ func (r *DelimitedReader) Seek(until byte, backwards bool) (n int, err error) {
 
 		// Did we find anything?
 		if i == p-1 && data[p] != until {
-			return r.pe - i, ErrNotFound
+			return r.pe - i, ragel.ErrNotFound
 		}
 
 		// Update the right boundary to be the character next to the sought one
