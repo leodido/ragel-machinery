@@ -40,9 +40,9 @@ func (r DelimitedReader) State() *State {
 //
 // It always works on the current boundaries of the data,
 // and updates them accordingly.
-// It returns the number of bytes read and, eventually, an error.
+// It returns the chunk of bytes read and, eventually, an error.
 // When delim is not found it returns an io.ErrUnexpectedEOF.
-func (r *DelimitedReader) Read() (n int, err error) {
+func (r *DelimitedReader) Read() (line []byte, err error) {
 	p := r.p
 
 	// Process only the data still to read when P is greater than the half of the data
@@ -60,7 +60,7 @@ func (r *DelimitedReader) Read() (n int, err error) {
 	}
 
 	// Read until the first occurrence of the delimiter
-	line, err := r.reader.ReadBytes(r.delim)
+	line, err = r.reader.ReadBytes(r.delim)
 
 	// Storing the data up to and including the delimiter
 	r.data = append(r.data, line...)
@@ -74,7 +74,7 @@ func (r *DelimitedReader) Read() (n int, err error) {
 		r.eof = r.pe
 	}
 
-	return len(line), err
+	return line, err
 }
 
 // Seek look for the first instance of until.

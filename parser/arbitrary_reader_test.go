@@ -24,6 +24,12 @@ func TestArbitraryReader(t *testing.T) {
 		res    []result
 	}{
 		{
+			input: "ciao",
+			res: []result{
+				{"ciao", 4, io.ErrUnexpectedEOF, nil, 0},
+			},
+		},
+		{
 			input: "ciao\nmondo",
 			res: []result{
 				{"ciao\n", 5, nil, nil, 0},
@@ -86,7 +92,7 @@ func TestArbitraryReader(t *testing.T) {
 		r := ArbitraryReader(strings.NewReader(test.input), '\n')
 
 		for _, o := range test.res {
-			n, err := r.Read()
+			res, err := r.Read()
 			// Check error reading forward
 			errorCheck(t, o.forwardErr, err)
 
@@ -100,7 +106,7 @@ func TestArbitraryReader(t *testing.T) {
 			}
 
 			// Check number of read bytes
-			check(t, o.num, n)
+			check(t, o.num, len(res))
 
 			// Check the current data window
 			check(t, o.data, string(r.data))
