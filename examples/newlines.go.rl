@@ -32,21 +32,27 @@ func (m *newlinesMachine) Exec(s *parser.State) (int, int) {
     // Retrieve previously stored parsing variables
     _, p, pe, eof, data := s.Get()
     // Inline FSM code here
-	%% write exec;
+    %% write exec;
     // Update parsing variables
-	s.Set(cs, p, pe, eof)
-	return p, pe
+    s.Set(cs, p, pe, eof)
+    return p, pe
 }
 
-func (m *newlinesMachine) OnErr() {
+func (m *newlinesMachine) OnErr(c []byte) {
     fmt.Println("OnErr")
+    if len(c) > 0 {
+        fmt.Println(string(c))
+    }
 }
 
-func (m *newlinesMachine) OnEOF() {
+func (m *newlinesMachine) OnEOF(c []byte) {
     fmt.Println("OnEOF")
+    if len(c) > 0 {
+        fmt.Println(string(c))
+    }
 }
 
-func (m *multilineMachine) OnCompletion() {
+func (m *newlinesMachine) OnCompletion() {
     fmt.Println("OnCompletion")
 }
 

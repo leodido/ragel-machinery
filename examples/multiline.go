@@ -6,12 +6,10 @@ import (
 	"io"
 )
 
+const multilineStart int = 1
+const multilineError int = 0
 
-const multiline_start int = 1
-const multiline_error int = 0
-
-const multiline_en_main int = 1
-
+const multilineEnMain int = 1
 
 type multilineMachine struct {
 	// define here your support variables for ragel actions
@@ -27,27 +25,27 @@ func (m *multilineMachine) Exec(s *parser.State) (int, int) {
 
 	{
 		if p == pe {
-			goto _test_eof
+			goto _testEof
 		}
 		switch cs {
 		case 1:
-			goto st_case_1
+			goto stCase1
 		case 0:
-			goto st_case_0
+			goto stCase0
 		case 2:
-			goto st_case_2
+			goto stCase2
 		case 3:
-			goto st_case_3
+			goto stCase3
 		case 4:
-			goto st_case_4
+			goto stCase4
 		}
-		goto st_out
-	st_case_1:
+		goto stOut
+	stCase1:
 		if data[p] == 36 {
 			goto tr0
 		}
 		goto st0
-	st_case_0:
+	stCase0:
 	st0:
 		cs = 0
 		goto _out
@@ -62,9 +60,9 @@ func (m *multilineMachine) Exec(s *parser.State) (int, int) {
 		goto st2
 	st2:
 		if p++; p == pe {
-			goto _test_eof2
+			goto _testEof2
 		}
-	st_case_2:
+	stCase2:
 		if data[p] == 10 {
 			goto st3
 		}
@@ -74,9 +72,9 @@ func (m *multilineMachine) Exec(s *parser.State) (int, int) {
 		goto st0
 	st3:
 		if p++; p == pe {
-			goto _test_eof3
+			goto _testEof3
 		}
-	st_case_3:
+	stCase3:
 		if data[p] == 10 {
 			goto tr3
 		}
@@ -92,9 +90,9 @@ func (m *multilineMachine) Exec(s *parser.State) (int, int) {
 		goto st4
 	st4:
 		if p++; p == pe {
-			goto _test_eof4
+			goto _testEof4
 		}
-	st_case_4:
+	stCase4:
 		switch data[p] {
 		case 10:
 			goto tr3
@@ -105,18 +103,18 @@ func (m *multilineMachine) Exec(s *parser.State) (int, int) {
 			goto st3
 		}
 		goto st0
-	st_out:
-	_test_eof2:
+	stOut:
+	_testEof2:
 		cs = 2
-		goto _test_eof
-	_test_eof3:
+		goto _testEof
+	_testEof3:
 		cs = 3
-		goto _test_eof
-	_test_eof4:
+		goto _testEof
+	_testEof4:
 		cs = 4
-		goto _test_eof
+		goto _testEof
 
-	_test_eof:
+	_testEof:
 		{
 		}
 	_out:
@@ -129,12 +127,18 @@ func (m *multilineMachine) Exec(s *parser.State) (int, int) {
 	return p, pe
 }
 
-func (m *multilineMachine) OnErr() {
+func (m *multilineMachine) OnErr(c []byte) {
 	fmt.Println("OnErr")
+	if len(c) > 0 {
+		fmt.Println(string(c))
+	}
 }
 
-func (m *multilineMachine) OnEOF() {
+func (m *multilineMachine) OnEOF(c []byte) {
 	fmt.Println("OnEOF")
+	if len(c) > 0 {
+		fmt.Println(string(c))
+	}
 }
 
 func (m *multilineMachine) OnCompletion() {

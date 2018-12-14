@@ -6,10 +6,10 @@ import (
 	"io"
 )
 
-const newlines_start int = 1
-const newlines_error int = 0
+const newlinesStart int = 1
+const newlinesError int = 0
 
-const newlines_en_main int = 1
+const newlinesEnMain int = 1
 
 type newlinesMachine struct {
 	// define here your support variables for ragel actions
@@ -26,103 +26,103 @@ func (m *newlinesMachine) Exec(s *parser.State) (int, int) {
 
 	{
 		if p == pe {
-			goto _test_eof
+			goto _testEof
 		}
 		switch cs {
 		case 1:
-			goto st_case_1
+			goto stCase1
 		case 0:
-			goto st_case_0
+			goto stCase0
 		case 2:
-			goto st_case_2
+			goto stCase2
 		case 3:
-			goto st_case_3
+			goto stCase3
 		case 4:
-			goto st_case_4
+			goto stCase4
 		case 5:
-			goto st_case_5
+			goto stCase5
 		case 6:
-			goto st_case_6
+			goto stCase6
 		case 7:
-			goto st_case_7
+			goto stCase7
 		case 8:
-			goto st_case_8
+			goto stCase8
 		case 9:
-			goto st_case_9
+			goto stCase9
 		case 10:
-			goto st_case_10
+			goto stCase10
 		case 11:
-			goto st_case_11
+			goto stCase11
 		}
-		goto st_out
-	st_case_1:
+		goto stOut
+	stCase1:
 		if data[p] == 101 {
 			goto st2
 		}
 		goto st0
-	st_case_0:
+	stCase0:
 	st0:
 		cs = 0
 		goto _out
 	st2:
 		if p++; p == pe {
-			goto _test_eof2
+			goto _testEof2
 		}
-	st_case_2:
+	stCase2:
 		if data[p] == 120 {
 			goto st3
 		}
 		goto st0
 	st3:
 		if p++; p == pe {
-			goto _test_eof3
+			goto _testEof3
 		}
-	st_case_3:
+	stCase3:
 		if data[p] == 97 {
 			goto st4
 		}
 		goto st0
 	st4:
 		if p++; p == pe {
-			goto _test_eof4
+			goto _testEof4
 		}
-	st_case_4:
+	stCase4:
 		if data[p] == 109 {
 			goto st5
 		}
 		goto st0
 	st5:
 		if p++; p == pe {
-			goto _test_eof5
+			goto _testEof5
 		}
-	st_case_5:
+	stCase5:
 		if data[p] == 112 {
 			goto st6
 		}
 		goto st0
 	st6:
 		if p++; p == pe {
-			goto _test_eof6
+			goto _testEof6
 		}
-	st_case_6:
+	stCase6:
 		if data[p] == 108 {
 			goto st7
 		}
 		goto st0
 	st7:
 		if p++; p == pe {
-			goto _test_eof7
+			goto _testEof7
 		}
-	st_case_7:
+	stCase7:
 		if data[p] == 101 {
 			goto st8
 		}
 		goto st0
 	st8:
 		if p++; p == pe {
-			goto _test_eof8
+			goto _testEof8
 		}
-	st_case_8:
+	stCase8:
 		if data[p] == 32 {
 			goto st9
 		}
@@ -132,9 +132,9 @@ func (m *newlinesMachine) Exec(s *parser.State) (int, int) {
 		goto st0
 	st9:
 		if p++; p == pe {
-			goto _test_eof9
+			goto _testEof9
 		}
-	st_case_9:
+	stCase9:
 		if 48 <= data[p] && data[p] <= 57 {
 			goto tr9
 		}
@@ -148,9 +148,9 @@ func (m *newlinesMachine) Exec(s *parser.State) (int, int) {
 		goto st10
 	st10:
 		if p++; p == pe {
-			goto _test_eof10
+			goto _testEof10
 		}
-	st_case_10:
+	stCase10:
 		if data[p] == 10 {
 			goto st11
 		}
@@ -160,43 +160,43 @@ func (m *newlinesMachine) Exec(s *parser.State) (int, int) {
 		goto st0
 	st11:
 		if p++; p == pe {
-			goto _test_eof11
+			goto _testEof11
 		}
-	st_case_11:
+	stCase11:
 		goto st0
-	st_out:
-	_test_eof2:
+	stOut:
+	_testEof2:
 		cs = 2
-		goto _test_eof
-	_test_eof3:
+		goto _testEof
+	_testEof3:
 		cs = 3
-		goto _test_eof
-	_test_eof4:
+		goto _testEof
+	_testEof4:
 		cs = 4
-		goto _test_eof
-	_test_eof5:
+		goto _testEof
+	_testEof5:
 		cs = 5
-		goto _test_eof
-	_test_eof6:
+		goto _testEof
+	_testEof6:
 		cs = 6
-		goto _test_eof
-	_test_eof7:
+		goto _testEof
+	_testEof7:
 		cs = 7
-		goto _test_eof
-	_test_eof8:
+		goto _testEof
+	_testEof8:
 		cs = 8
-		goto _test_eof
-	_test_eof9:
+		goto _testEof
+	_testEof9:
 		cs = 9
-		goto _test_eof
-	_test_eof10:
+		goto _testEof
+	_testEof10:
 		cs = 10
-		goto _test_eof
-	_test_eof11:
+		goto _testEof
+	_testEof11:
 		cs = 11
-		goto _test_eof
+		goto _testEof
 
-	_test_eof:
+	_testEof:
 		{
 		}
 	_out:
@@ -209,12 +209,18 @@ func (m *newlinesMachine) Exec(s *parser.State) (int, int) {
 	return p, pe
 }
 
-func (m *newlinesMachine) OnErr() {
+func (m *newlinesMachine) OnErr(c []byte) {
 	fmt.Println("OnErr")
+	if len(c) > 0 {
+		fmt.Println(string(c))
+	}
 }
 
-func (m *newlinesMachine) OnEOF() {
+func (m *newlinesMachine) OnEOF(c []byte) {
 	fmt.Println("OnEOF")
+	if len(c) > 0 {
+		fmt.Println(string(c))
+	}
 }
 
 func (m *newlinesMachine) OnCompletion() {
