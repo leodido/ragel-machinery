@@ -42,3 +42,16 @@ $3
 	// 2
 	// RECV $3
 }
+
+func Example_multiline_err() {
+	in := `$1`
+	fsm := &multilineMachine{}
+	fsm.Parse(strings.NewReader(in))
+	for _, item := range fsm.items {
+		fmt.Println("RECV", item)
+	}
+	// Output:
+	// OnErr
+	// $1
+	// OnCompletion
+}
