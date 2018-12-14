@@ -5,9 +5,9 @@ type Machiner interface {
 	// Exec contains the ragel finite-state machine code and returns boundaries.
 	Exec(state *State) (p int, pe int)
 	// OnErr is a method called when an error is encountered.
-	OnErr()
+	OnErr(chunk []byte)
 	// OnEOF is a method called when an EOF is encountered.
-	OnEOF()
+	OnEOF(chunk []byte)
 	// OnCompletion is a method called when the parser loop completes.
 	OnCompletion()
 }

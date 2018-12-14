@@ -67,12 +67,12 @@ func New(r Reader, m Machiner, opts ...Option) *Parser {
 // It stops whenever and EOF or an error happens.
 func (p *Parser) Parse() {
 	for {
-		_, err := p.reader.Read()
+		res, err := p.reader.Read()
 		if err != nil {
 			if err == io.EOF {
-				p.machine.OnEOF()
+				p.machine.OnEOF(res)
 			} else {
-				p.machine.OnErr()
+				p.machine.OnErr(res)
 			}
 			break
 		}
