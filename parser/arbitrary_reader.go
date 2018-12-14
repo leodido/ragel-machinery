@@ -73,6 +73,9 @@ func (r *DelimitedReader) Read() (line []byte, err error) {
 		// Update the position of EOF
 		r.eof = r.pe
 	}
+	if err != nil {
+		err = ragel.NewReadingError(err.Error())
+	}
 
 	return line, err
 }
@@ -90,7 +93,7 @@ func (r *DelimitedReader) Read() (line []byte, err error) {
 func (r *DelimitedReader) Seek(until byte, backwards bool) (n int, err error) {
 	data := r.data
 	if len(data) == 0 {
-		return 0, ragel.ErrNotFound
+		return 0, ragel.NewReadingError(ragel.ErrNotFound)
 	}
 	if backwards {
 		// Data boundaries
@@ -106,7 +109,7 @@ func (r *DelimitedReader) Seek(until byte, backwards bool) (n int, err error) {
 
 		// Did we find anything?
 		if i == p-1 && data[p] != until {
-			return r.pe - i, ragel.ErrNotFound
+			return r.pe - i, ragel.NewReadingError(ragel.ErrNotFound)
 		}
 
 		// Update the right boundary to be the character next to the sought one

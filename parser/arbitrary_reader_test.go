@@ -126,7 +126,7 @@ func check(t *testing.T, x, y interface{}) {
 }
 
 func errorCheck(t *testing.T, x, y error) {
-	if x != y {
-		t.Errorf("(-want +got)\n%s", fmt.Sprintf("-: %#v\n+: %#v", x, y))
+	if x != nil && y != nil && x.Error() != y.Error() {
+		t.Errorf("(-want +got)\n%s", fmt.Sprintf("-: %#v\n+: %#v", x.Error(), y.Error()))
 	}
 }
