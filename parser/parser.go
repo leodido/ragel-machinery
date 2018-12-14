@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"github.com/leodido/ragel-machinery"
 	"io"
 )
 
@@ -72,7 +73,7 @@ func (p *Parser) Parse() {
 			if err == io.EOF {
 				p.machine.OnEOF(res)
 			} else {
-				p.machine.OnErr(res)
+				p.machine.OnErr(res, ragel.NewReadingError(err.Error()))
 			}
 			break
 		}
