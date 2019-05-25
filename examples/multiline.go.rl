@@ -27,14 +27,14 @@ action on_init {
 
 t = 10;
 
-main := 
+main :=
     start: (
         # Note that corpus can contain trailers - ie., can span more lines in this case.
         '$' >on_init (digit | t)+ -> trailer
     ),
     trailer: (
         t >on_trailer -> final |
-        t >on_trailer -> start 
+        t >on_trailer -> start
     );
 }%%
 
@@ -57,8 +57,8 @@ func (m *multilineMachine) Exec(s *parser.State) (int, int) {
     return p, pe
 }
 
-func (m *multilineMachine) OnErr(c []byte) {
-    fmt.Println("OnErr")
+func (m *multilineMachine) OnErr(c []byte, e error) {
+    fmt.Println("OnErr", e)
     if len(c) > 0 {
         fmt.Println(string(c))
     }
@@ -83,7 +83,7 @@ func (m *multilineMachine) Parse(r io.Reader) {
     p := parser.New(
         parser.ArbitraryReader(r, 10),          // How to read the stream
         m,                                      // How to parse it
-        parser.WithStart(%%{ write start; }%%), // Options    
+        parser.WithStart(%%{ write start; }%%), // Options
     )
     p.Parse()
 }

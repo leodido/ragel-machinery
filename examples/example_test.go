@@ -18,7 +18,7 @@ example X
 		fmt.Println("RECV", elem)
 	}
 	// Output:
-	// OnEOF
+	// OnErr EOF
 	// OnCompletion
 	// RECV example 0
 	// RECV example 1
@@ -36,7 +36,7 @@ $3
 		fmt.Println("RECV", item)
 	}
 	// Output:
-	// OnEOF
+	// OnErr EOF
 	// OnCompletion
 	// RECV $1
 	// 2
@@ -51,7 +51,7 @@ func Example_multiline_err() {
 		fmt.Println("RECV", item)
 	}
 	// Output:
-	// OnErr
+	// OnErr unexpected EOF
 	// $1
 	// OnCompletion
 }

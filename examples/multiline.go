@@ -127,8 +127,8 @@ func (m *multilineMachine) Exec(s *parser.State) (int, int) {
 	return p, pe
 }
 
-func (m *multilineMachine) OnErr(c []byte) {
-	fmt.Println("OnErr")
+func (m *multilineMachine) OnErr(c []byte, e error) {
+	fmt.Println("OnErr", e)
 	if len(c) > 0 {
 		fmt.Println(string(c))
 	}

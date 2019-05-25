@@ -19,6 +19,7 @@ multiline.go: multiline.go.rl
 tests: *_test.go
 	go test -race -timeout 10s -v ./...
 
+# note: this requires gawk
 .PHONY: snake2camel
 snake2camel:
 	@awk -i inplace '{ \

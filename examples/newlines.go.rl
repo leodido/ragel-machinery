@@ -27,7 +27,7 @@ type newlinesMachine struct{
 
 // Exec implements the parser.Parser interface.
 func (m *newlinesMachine) Exec(s *parser.State) (int, int) {
-    // Tell it to parse from the start for each byte(10) delimited incoming chunk 
+    // Tell it to parse from the start for each byte(10) delimited incoming chunk
     cs := %%{ write start; }%%
     // Retrieve previously stored parsing variables
     _, p, pe, eof, data := s.Get()
@@ -38,8 +38,8 @@ func (m *newlinesMachine) Exec(s *parser.State) (int, int) {
     return p, pe
 }
 
-func (m *newlinesMachine) OnErr(c []byte) {
-    fmt.Println("OnErr")
+func (m *newlinesMachine) OnErr(c []byte, e error) {
+    fmt.Println("OnErr", e)
     if len(c) > 0 {
         fmt.Println(string(c))
     }

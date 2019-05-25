@@ -2,8 +2,9 @@ package examples
 
 import (
 	"fmt"
-	parser "github.com/leodido/ragel-machinery/parser"
 	"io"
+
+	parser "github.com/leodido/ragel-machinery/parser"
 )
 
 const newlinesStart int = 1
@@ -209,8 +210,8 @@ func (m *newlinesMachine) Exec(s *parser.State) (int, int) {
 	return p, pe
 }
 
-func (m *newlinesMachine) OnErr(c []byte) {
-	fmt.Println("OnErr")
+func (m *newlinesMachine) OnErr(c []byte, e error) {
+	fmt.Println("OnErr", e)
 	if len(c) > 0 {
 		fmt.Println(string(c))
 	}
